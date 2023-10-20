@@ -2,6 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("upload_dataset/", views.home, name="upload")
+    path("", views.donuts, name="donuts"),
 ]

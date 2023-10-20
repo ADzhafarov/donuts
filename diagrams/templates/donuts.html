@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Donuts</title>
+            <link rel="stylesheet" href="static/css/dropdown.css">
+            <script src="static/js/dropdown.js"></script>
+        </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <div class="container center">
+            <div class="item item-1">
+                <label class="dropdown">
+                <div class="dd-button">
+                    Select a data sample
+                </div>
+                <input type="checkbox" class="dd-input" id="test">
+                <ul class="dd-menu">
+                    {% for dataset in datasets %}
+                        <li><a href="/?sample={{dataset}}">{{ dataset }}</a></li>
+                    {% endfor %}
+                </ul>
+                </label>
+            </div>
+            {# <div class="item item-2">2</div>  #}
+            {# <div class="item item-3">3</div>  #}
+            <div class="item item-4">
+                {% if sample %}
+                    <img id="generated-image" src="data:image/png;base64,{{ plot }}" alt="Donut">
+                {% endif %}
+            </div>
+            <div class="item item-2">
+                <button id="download-pdf" style="display: none">Download as PDF</button>
+                <script>
+                    {% if sample %}
+                        const exportButton = document.getElementById("download-pdf");
+                        exportButton.style.display = 'block';
+                    {% endif %}
+                        
+                </script>
+            </div>
+            <script>
+                {% if sample %}
+                    document.getElementById('download-pdf').addEventListener('click', function() {
+                        const image = document.getElementById('generated-image');
+                        const pdf = new jspdf.jsPDF();
+                        pdf.addImage(image, 'JPEG', 10, 10, 190, 140); // Adjust the positioning and dimensions as needed
+                        pdf.save( {{ samplename | tojson }} + '.pdf');
+                    });
+                {% endif %}
+
+            </script>
+        </div>
+    </body>
+</html>
